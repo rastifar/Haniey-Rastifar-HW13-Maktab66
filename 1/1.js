@@ -1,10 +1,6 @@
 $(document).ready(function () {
-  $("#addRow").click(function () {
-    // if($("input[type=radio]:checked").val() == "New"){
-    //     alert("correct")
-    // }
-     
-    // $('#tbody').append('<tr><td> + information + </td></tr>')
+ 
+  $("#addRow").click(function () {    
     $("#tbody").append(`
         <tr>
         <th  scope="row">
@@ -43,44 +39,33 @@ $(document).ready(function () {
               </div>   
             </div>              
         </td>   
-</tr> `)
-//.click(function(e){
-    // console.log("clicked")
-    // console.log(e);
-    // $('.delete').click(function(e){
-    //     console.log("delete");
-    //     console.log(e);
-    //    $(this).closest('tr').remove();
-    // })
-    // $('.clone').click(function(e){
-    //     console.log("clone");
-    //     console.log(e);
-    //     var r = $(this).closest('tr').clone();
-    //     $(this).closest('tr').after(r);
-    //   // $(this).closest('tr').remove();
-    // })
-});
-// $('.delete').click(function(e){
-//     console.log("delete");
-//     console.log(e);
-//    $(this).closest('tr').remove();
-// })
-// $('.clone').click(function(e){
-//     console.log("clone");
-//     console.log(e);
-//     var r = $(this).closest('tr').clone();
-//     $(this).closest('tr').after(r);
-//   // $(this).closest('tr').remove();
-// })
-
-$('.table').on('click','input[type="button"]',function(e){
-    $(this).closest('tr').remove();
-})
-
-
+</tr> `);
   });
 
- 
 
+  $(".table").click(function (e) {
+   
+    if ($(e.target).text().trim() == "Delete") {
+        console.log('de');
+        $(e.target).closest("tr").remove();
 
+    } else if ($(e.target).text().trim() == "Clone") {
+        console.log('clone');
+        let r = $(e.target).closest("tr").clone();
+      $(e.target).closest("tr").after(r);
+    //  $(e.target).closest("tr").insertAfter(r);
 
+    } else if ($(e.target).val() == "Confirm") {
+      $("input[type=text]", $(e.target).parent().parent().parent().parent()).prop(
+        "disabled",true);
+    } else if (
+      $(e.target).val() == "InProgress" ||
+      $(e.target).val() == "New"
+    ) {
+      $("input[type=text]", $(e.target).parent().parent().parent().parent()).prop(
+        "disabled",
+        false
+      );
+    }
+  });
+});
