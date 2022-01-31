@@ -1,6 +1,9 @@
 $(document).ready(function () {
- 
-  $("#addRow").click(function () {    
+  let cloneId = 0
+
+  $(".rowInfo").text($(".table #tbody tr").length);
+  $('.notConfirmedRowInfo').text(count())
+  $("#addRow").click(function () {
     $("#tbody").append(`
         <tr>
         <th  scope="row">
@@ -40,32 +43,51 @@ $(document).ready(function () {
             </div>              
         </td>   
 </tr> `);
+
+    $(".rowInfo").text($(".table #tbody tr").length);
+    $(".notConfirmedRowInfo").text(count());
   });
 
-
   $(".table").click(function (e) {
-   
     if ($(e.target).text().trim() == "Delete") {
-        console.log('de');
-        $(e.target).closest("tr").remove();
-
-    } else if ($(e.target).text().trim() == "Clone") {
-        console.log('clone');
-        let r = $(e.target).closest("tr").clone();
-      $(e.target).closest("tr").after(r);
-    //  $(e.target).closest("tr").insertAfter(r);
+      console.log("de");
+      $(e.target).closest("tr").remove();
+      $(".rowInfo").text($(".table #tbody tr").length);
+      $(".notConfirmedRowInfo").text(count());
+    } else if ($(e.target).text().trim() == "Clone") {     
+      let row = $(e.target).closest("tr").clone().find('input:radio').attr('name','status'+ cloneId).end() 
+      cloneId++
+      $(e.target).closest("tr").after(row);
+      //  $(e.target).closest("tr").insertAfter(r);
+      $(".rowInfo").text($(".table #tbody tr").length);
+      $(".notConfirmedRowInfo").text(count());
 
     } else if ($(e.target).val() == "Confirm") {
-      $("input[type=text]", $(e.target).parent().parent().parent().parent()).prop(
-        "disabled",true);
+      $("input[type=text]",$(e.target).parent().parent().parent().parent()).prop("disabled", true);
+      // $(".rowInfo").text($(".table #tbody tr").length);
+      $(".notConfirmedRowInfo").text(count());
     } else if (
       $(e.target).val() == "InProgress" ||
       $(e.target).val() == "New"
     ) {
-      $("input[type=text]", $(e.target).parent().parent().parent().parent()).prop(
-        "disabled",
-        false
-      );
+      $(
+        "input[type=text]",
+        $(e.target).parent().parent().parent().parent()
+      ).prop("disabled", false);
+      // $(".rowInfo").text($(".table #tbody tr").length);
+      $(".notConfirmedRowInfo").text(count());
     }
   });
+
+  
+
+  function count(){
+    let temp=0   
+    $(".table #tbody tr #confirmedRadio").each(function(){  
+      if(!$(this).prop("checked")){
+        temp++
+      }    
+    })
+  return temp
+  }
 });
