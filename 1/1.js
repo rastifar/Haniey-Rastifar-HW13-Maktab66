@@ -4,7 +4,8 @@ $(document).ready(function () {
   $(".rowInfo").text($(".table #tbody tr").length);
   $('.notConfirmedRowInfo').text(count())
   $("#addRow").click(function () {
-    $("#tbody").append(`
+    cloneId++;
+    $("#tbody").prepend(`
         <tr>
         <th  scope="row">
             <div class="d-flex h-25">
@@ -23,19 +24,19 @@ $(document).ready(function () {
         <td >
             <div class="d-flex py-1">
             <div class="form-check me-2 py-1">
-                <input class="form-check-input" type="radio" name="status" id="NewRadio">
+                <input class="form-check-input" type="radio" name="status${cloneId}" id="NewRadio">
                 <label class="form-check-label" for="NewRadio">
                 New
                 </label>
               </div>
               <div class="form-check me-2 py-1">
-                <input class="form-check-input" type="radio" name="status" id="InprogressRadio">
+                <input class="form-check-input" type="radio" name="status${cloneId}" id="InprogressRadio">
                 <label class="form-check-label" for="InprogressRadio">
                  In progress
                 </label>
               </div>
               <div class="form-check me-2 py-1">
-                <input class="form-check-input" type="radio" name="status" id="confirmedRadio">
+                <input class="form-check-input" type="radio" name="status${cloneId}" id="confirmedRadio">
                 <label class="form-check-label" for="confirmedRadio">
                     confirmed
                 </label>
@@ -43,28 +44,32 @@ $(document).ready(function () {
             </div>              
         </td>   
 </tr> `);
-
+console.log($('.table #tbody tr'));
     $(".rowInfo").text($(".table #tbody tr").length);
     $(".notConfirmedRowInfo").text(count());
   });
 
   $(".table").click(function (e) {
+    console.log(cloneId);
     if ($(e.target).text().trim() == "Delete") {
       console.log("de");
       $(e.target).closest("tr").remove();
       $(".rowInfo").text($(".table #tbody tr").length);
       $(".notConfirmedRowInfo").text(count());
     } else if ($(e.target).text().trim() == "Clone") {     
-      let row = $(e.target).closest("tr").clone().find('input:radio').attr('name','status'+ cloneId).end() 
       cloneId++
+      let row = $(e.target).closest("tr").clone().find('input:radio').attr('name','status'+ cloneId).end() 
+      
+      console.log(cloneId);
       $(e.target).closest("tr").after(row);
       //  $(e.target).closest("tr").insertAfter(r);
       $(".rowInfo").text($(".table #tbody tr").length);
       $(".notConfirmedRowInfo").text(count());
 
     } else if ($(e.target).val() == "Confirm") {
+      console.log("con");
       $("input[type=text]",$(e.target).parent().parent().parent().parent()).prop("disabled", true);
-      // $(".rowInfo").text($(".table #tbody tr").length);
+      $(".rowInfo").text($(".table #tbody tr").length);
       $(".notConfirmedRowInfo").text(count());
     } else if (
       $(e.target).val() == "InProgress" ||
@@ -74,7 +79,11 @@ $(document).ready(function () {
         "input[type=text]",
         $(e.target).parent().parent().parent().parent()
       ).prop("disabled", false);
-      // $(".rowInfo").text($(".table #tbody tr").length);
+       $(".rowInfo").text($(".table #tbody tr").length);
+      $(".notConfirmedRowInfo").text(count());
+    }
+    else{
+      $(".rowInfo").text($(".table #tbody tr").length);
       $(".notConfirmedRowInfo").text(count());
     }
   });
